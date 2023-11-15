@@ -60,7 +60,7 @@ String readDHTHumidity() {
 
 // Replaces placeholder with Relay state value
 String processor(const String& var){
-  Serial.println(var);
+  Serial.print(var);
   if(var == "STATE1"){
     if(digitalRead(Relay_1)){
       Relay_1_State = "ON";
@@ -68,7 +68,7 @@ String processor(const String& var){
     else{
       Relay_1_State = "OFF";
       }
-    Serial.print(Relay_1_State);
+    Serial.println(Relay_1_State);
     return Relay_1_State;
   }
   if(var == "STATE2"){
@@ -79,8 +79,16 @@ String processor(const String& var){
     else{
       Relay_2_State = "OFF";
     }
-    Serial.print(Relay_2_State);
+    Serial.println(Relay_2_State);
     return Relay_2_State;
+  }
+  if(var == "TEMPERATURE"){
+    //Serial.print(readDHTTemperature());
+    return readDHTTemperature();
+  }
+  else if(var == "HUMIDITY"){
+    //Serial.print(readDHTHumidity());
+    return readDHTHumidity();
   }
   return String();
 }
@@ -152,6 +160,15 @@ void setup(){
     request->send(SPIFFS, "/index.html", String(), false, processor);
   });
 
+  // Route for root / web page
+  server.on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/index.html", readDHTTemperature().c_str());
+  });
+  server.on("/humidity", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/index.html", readDHTHumidity().c_str());
+  });
+
+  
   // Start server
   server.begin();
 }
