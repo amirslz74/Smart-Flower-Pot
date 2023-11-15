@@ -12,5 +12,43 @@
   <p><a href="/on1"><button class="button">ON</button></a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="/on2"><button class="button">ON</button></a></p>
   <p><a href="/off1"><button class="button button2">OFF</button></a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="/off2"><button class="button button2">OFF</button></a></p>
  
+ 
+   <p>
+    <i class="fas fa-thermometer-half" style="color:#059e8a;"></i> 
+    <span class="dht-labels">Temperature</span> 
+    <span id="temperature">%TEMPERATURE%</span>
+    <sup class="units">&deg;C</sup>
+  </p>
+  <p>
+    <i class="fas fa-tint" style="color:#00add6;"></i> 
+    <span class="dht-labels">Humidity</span>
+    <span id="humidity">%HUMIDITY%</span>
+    <sup class="units">&percnt;</sup>
+  </p>
+
+<script>
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("temperature").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/temperature", true);
+  xhttp.send();
+}, 10000 ) ;
+
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("humidity").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/humidity", true);
+  xhttp.send();
+}, 10000 ) ;
+</script>
+
 </body>
 </html>
