@@ -4,10 +4,16 @@
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 #include <DHT.h>
+#include "time.h"
 
 // Replace with your network credentials
 const char* ssid = "gando";
 const char* password = "@e6974r*";
+
+//config NTP time server
+const char* ntpServer = "pool.ntp.org";
+const long  gmtOffset_sec = 0;
+const int   daylightOffset_sec = 3600;
 
 //DHT sensor configuration 
 #define DHTPIN 32     // Digital pin connected to the DHT sensor
@@ -27,6 +33,7 @@ String Relay_2_State;
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
 
+
 String readDHTTemperature() {
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   // Read temperature as Celsius (the default)
@@ -44,6 +51,7 @@ String readDHTTemperature() {
   }
 }
 
+
 String readDHTHumidity() {
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   float h = dht.readHumidity();
@@ -56,7 +64,6 @@ String readDHTHumidity() {
     return String(h);
   }
 }
-
 
 // Replaces placeholder with Relay state value
 String processor(const String& var){
@@ -86,12 +93,48 @@ String processor(const String& var){
     //Serial.print(readDHTTemperature());
     return readDHTTemperature();
   }
-  else if(var == "HUMIDITY"){
+  if(var == "HUMIDITY"){
     //Serial.print(readDHTHumidity());
     return readDHTHumidity();
   }
   return String();
 }
+
+
+void printLocalTime(){
+  struct tm timeinfo;
+  if(!getLocalTime(&timeinfo)){
+    Serial.println("Failed to obtain time");
+    return;
+  }
+  Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+  Serial.print("Day of week: ");
+  Serial.println(&timeinfo, "%A");
+  Serial.print("Month: ");
+  Serial.println(&timeinfo, "%B");
+  Serial.print("Day of Month: ");
+  Serial.println(&timeinfo, "%d");
+  Serial.print("Year: ");
+  Serial.println(&timeinfo, "%Y");
+  Serial.print("Hour: ");
+  Serial.println(&timeinfo, "%H");
+  Serial.print("Hour (12 hour format): ");
+  Serial.println(&timeinfo, "%I");
+  Serial.print("Minute: ");
+  Serial.println(&timeinfo, "%M");
+  Serial.print("Second: ");
+  Serial.println(&timeinfo, "%S");
+
+  Serial.println("Time variables");
+  char timeHour[3];
+  strftime(timeHour,3, "%H", &timeinfo);
+  Serial.println(timeHour);
+  char timeWeekDay[10];
+  strftime(timeWeekDay,10, "%A", &timeinfo);
+  Serial.println(timeWeekDay);
+  Serial.println();
+}
+
 
 void setup(){
   // Serial port for debugging purposes
@@ -125,6 +168,10 @@ void setup(){
 
   // Print ESP32 Local IP Address
   Serial.println(WiFi.localIP());
+
+  // Init and get the time
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+  printLocalTime();
 
   // Route for root / web page
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -174,5 +221,11 @@ void setup(){
 }
  
 void loop(){
-  
+  //delay(1000);
+  //printLocalTime();
 }
+
+
+
+
+
