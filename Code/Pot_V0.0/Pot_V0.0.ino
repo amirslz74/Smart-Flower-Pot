@@ -206,13 +206,22 @@ void setup(){
     digitalWrite (Relay_2, LOW);
     request->send(SPIFFS, "/index.html", String(), false, processor);
   });
+  
+  server.on("/relay1state", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", digitalRead(Relay_1) ? "ON" : "OFF");
+  });
+  
+  server.on("/relay2state", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", digitalRead(Relay_2) ? "ON" : "OFF");
+  });
+
 
   // Route for root / web page
   server.on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/index.html", readDHTTemperature().c_str());
+    request->send(200, "text/plain", readDHTTemperature().c_str());
   });
   server.on("/humidity", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/index.html", readDHTHumidity().c_str());
+    request->send(200, "text/plain", readDHTHumidity().c_str());
   });
 
   
@@ -224,8 +233,3 @@ void loop(){
   //delay(1000);
   //printLocalTime();
 }
-
-
-
-
-

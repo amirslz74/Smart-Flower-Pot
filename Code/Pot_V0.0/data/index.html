@@ -8,12 +8,11 @@
 </head>
 <body>
   <h1>ESP32 Web Server</h1>
-  <p>Relay 1 state: <strong> %STATE1%</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Relay 2 state: <strong> %STATE2%</strong></p>
+  <p>Relay 1 state: <strong id="relay1state">%STATE1%</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Relay 2 state: <strong id="relay2state">%STATE2%</strong></p>
   <p><a href="/on1"><button class="button">ON</button></a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="/on2"><button class="button">ON</button></a></p>
   <p><a href="/off1"><button class="button button2">OFF</button></a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="/off2"><button class="button button2">OFF</button></a></p>
  
- 
-   <p>
+  <p>
     <i class="fas fa-thermometer-half" style="color:#059e8a;"></i> 
     <span class="dht-labels">Temperature</span> 
     <span id="temperature">%TEMPERATURE%</span>
@@ -26,28 +25,72 @@
     <sup class="units">&percnt;</sup>
   </p>
 
-<script>
-setInterval(function ( ) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("temperature").innerHTML = this.responseText;
-    }
-  };
-  xhttp.open("GET", "/temperature", true);
-  xhttp.send();
-}, 10000 ) ;
+  <!-- New paragraph for displaying time -->
+  <p>Time: <span id="current-time"></span></p>
 
-setInterval(function ( ) {
+<script>
+// Function to update the time
+function updateTime() {
+  var now = new Date();
+  var hours = now.getHours();
+  var minutes = now.getMinutes();
+  var seconds = now.getSeconds();
+  var formattedTime = hours + ':' + minutes + ':' + seconds;
+
+  // Update the HTML element with the current time
+  document.getElementById('current-time').innerHTML = formattedTime;
+}
+
+// Update the time initially
+updateTime();
+
+// Set interval to update the time every second
+setInterval(updateTime, 1000);
+
+// Update temperature and humidity every 10 seconds
+setInterval(function () {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("humidity").innerHTML = this.responseText;
+      document.getElementById('temperature').innerHTML = this.responseText;
     }
   };
-  xhttp.open("GET", "/humidity", true);
+  xhttp.open('GET', '/temperature', true);
   xhttp.send();
-}, 10000 ) ;
+}, 10000);
+
+setInterval(function () {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById('humidity').innerHTML = this.responseText;
+    }
+  };
+  xhttp.open('GET', '/humidity', true);
+  xhttp.send();
+}, 10000);
+
+// Check relay states every 15 seconds
+setInterval(function () {
+  var xhttpRelay = new XMLHttpRequest();
+  xhttpRelay.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById('relay1state').innerHTML = this.responseText;
+    }
+  };
+  xhttpRelay.open('GET', '/relay1state', true);
+  xhttpRelay.send();
+
+  var xhttpRelay2 = new XMLHttpRequest();
+  xhttpRelay2.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById('relay2state').innerHTML = this.responseText;
+    }
+  };
+  xhttpRelay2.open('GET', '/relay2state', true);
+  xhttpRelay2.send();
+}, 15000);
+
 </script>
 
 </body>
