@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ESP32 Web Server</title>
+  <title>Smart Pot Server</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <h1>ESP32 Web Server</h1>
+  <h1>Smart Pot Server</h1>
   <p>Relay 1 state: <strong id="relay1state">%STATE1%</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Relay 2 state: <strong id="relay2state">%STATE2%</strong></p>
   <p><a href="/on1"><button class="button">ON</button></a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="/on2"><button class="button">ON</button></a></p>
   <p><a href="/off1"><button class="button button2">OFF</button></a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="/off2"><button class="button button2">OFF</button></a></p>
@@ -89,7 +89,9 @@ setInterval(function () {
   };
   xhttpRelay2.open('GET', '/relay2state', true);
   xhttpRelay2.send();
-}, 15000);
+}, 10000);
+
+
 
 </script>
 
