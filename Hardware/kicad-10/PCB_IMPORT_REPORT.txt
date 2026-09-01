@@ -1,0 +1,12 @@
+Import Report
+=============
+
+Source file: PCB_PCB_Baby-Relay-V001_2026-09-01.json
+Source format: EasyEDA / JLCEDA Std
+Output file: SmartFlowerPot.kicad_pcb
+
+Statistics:
+  Footprints: 71
+  Tracks: 479
+  Vias: 48
+  Zones: 2

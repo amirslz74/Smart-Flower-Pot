@@ -5,10 +5,11 @@
 #include "SPIFFS.h"
 #include <DHT.h>
 #include "time.h"
+#include "secrets.h"
 
-// Replace with your network credentials
-const char* ssid = "REDACTED_WIFI_SSID";
-const char* password = "REDACTED_WIFI_PASSWORD";
+// Wi-Fi credentials are kept in secrets.h, which is intentionally not tracked.
+const char* ssid = WIFI_SSID;
+const char* password = WIFI_PASSWORD;
 
 //config NTP time server
 const char* ntpServer = "pool.ntp.org";
@@ -79,7 +80,6 @@ String processor(const String& var){
     return Relay_1_State;
   }
   if(var == "STATE2"){
-    //Serial.print("fuck");
     if(digitalRead(Relay_2)){
       Relay_2_State = "ON";
     }

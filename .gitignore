@@ -1,0 +1,10 @@
+**/secrets.h
+**/*.kicad_prl
+**/*-backups/
+**/~*.lck
+**/.history/
+Hardware/easyeda/source/.kicad_sch
+tmp/
+build/
+.DS_Store
+Thumbs.db

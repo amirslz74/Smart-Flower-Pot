@@ -1,0 +1,11 @@
+* text=auto
+*.kicad_pcb text eol=lf
+*.kicad_sch text eol=lf
+*.kicad_pro text eol=lf
+*.ino text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.jpg binary
+*.png binary
+*.pdf binary

@@ -7,10 +7,11 @@
 #include "WiFi.h"
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
+#include "secrets.h"
 
-// Replace with your network credentials
-const char* ssid = "REDACTED_WIFI_SSID";
-const char* password = "REDACTED_WIFI_PASSWORD";
+// Wi-Fi credentials are kept in secrets.h, which is intentionally not tracked.
+const char* ssid = WIFI_SSID;
+const char* password = WIFI_PASSWORD;
 
 // Set LED GPIO
 const int ledPin = 4;
